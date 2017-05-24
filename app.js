@@ -1,14 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+var React = require('react');
+var ReactDOM = require('react-dom');
+var routes = require('./config/routes');
+import 'semantic-ui-css/semantic.min.css';
 
-var HelloBox = React.createClass({
-	render: function() {
-		return (
-			<div className="helloTag">
-				Hello world from ReactJS
-			</div>
-		);
-	}
-});
-
-ReactDOM.render(<HelloBox />, document.getElementById('helloTag'));
+ReactDOM.render(
+	routes, 
+	document.getElementById('app')
+);
