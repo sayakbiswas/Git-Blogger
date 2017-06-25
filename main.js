@@ -4,8 +4,8 @@ const BrowserWindow = electron.BrowserWindow;
 
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({
-		height: 400,
-		width: 400
+		height: 600,
+		width: 800 
 	});
 	let url = require('url').format({
 		protocol: 'file',
