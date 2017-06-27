@@ -5,8 +5,10 @@ import LandingScreen from '../components/LandingScreen';
 
 class LandingScreenContainer extends React.Component {
 	render() {
+		console.log("match in container ", this.props.match);
 		return(
-			<LandingScreen />
+			<LandingScreen 
+				match={this.props.match} />
 		);
 	}
 }

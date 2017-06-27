@@ -4,16 +4,16 @@ import globalVars from '../config/globalVars';
 import PropTypes from 'prop-types';
 import { Container, Header, Segment, Button, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { LoginContainer } from '../containers/LoginContainer';
-import { LandingScreenContainer } from '../containers/LandingScreenContainer';
+import LoginContainer from '../containers/LoginContainer';
 
 function LandingScreen(props) {
+	console.log("props :: ", props);
 	return(
 		<Container text>
 			<Header as='h1' style={styles.header}>Git Blogger</Header>
 			<Header as='h3' style={styles.header}>An all in one personal website/blogging tool.</Header>
 			<Segment padded>
-				<Link to='login'>
+				<Link to={props.match.path + '/login'}>
 					<Button primary fluid>
 						Log In
 					</Button>
@@ -25,12 +25,7 @@ function LandingScreen(props) {
 				<Divider horizontal> OR </Divider>
 				<Button negative>Exit</Button>
 			</Segment>
-			<div>
-				<Switch>
-					<Route exact path='/' component={LandingScreenContainer} />
-					<Route path='/login' component={LoginContainer} />
-				</Switch>
-			</div>
+			<Route path={props.match.path + '/login'} component={LoginContainer} />
 		</Container>
 	);
 }

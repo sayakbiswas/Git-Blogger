@@ -8,7 +8,7 @@ function Login(props) {
 	console.log("inside Login");
 	return(
 		<Container text>
-			<Header as='h1' style={style.header}>Login</Header>
+			<Header as='h1' style={styles.header}>Login</Header>
 		</Container>
 	);
 }

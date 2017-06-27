@@ -1,8 +1,6 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import styles from '../styles/styles';
-import LandingScreenContainer from '../containers/LandingScreenContainer';
-import LoggedInLandingScreenContainer from '../containers/LoggedInLandingScreenContainer';
 
 class Home extends React.Component {
 	constructor(props) {
@@ -17,22 +15,15 @@ class Home extends React.Component {
 			<div className='main-container' style={styles.mainContainer} >
 				{(() => {
 					if(this.state.isLoggedIn) {
-						return(
-							<div>
-								<Route exact path="/" component={LoggedInLandingScreenContainer} />
-							</div>
-						);
+						this.props.history.push("/dashboard");
 					} else {
-						return(
-							<div>
-								<Route exact path="/" component={LandingScreenContainer} />
-							</div>
-						);
+						this.props.history.push("/landing");
 					}
 				}) ()}
+				{this.props.children}
 			</div>
 		);
 	}
 }
 
-module.exports = Home;
+module.exports = withRouter(Home);
