@@ -17,5 +17,5 @@ docker run -it <your username>/git-blogger /bin/bash
 You can test your changes be running the following from outside the container:
 
 ```shell
-docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix sayakbiswas/git-blogger /usr/bin/npm start --prefix /usr/src/app/Git-Blogger
+docker run -it --rm -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix <your username>/git-blogger /usr/bin/npm start --prefix /usr/src/app/Git-Blogger
 ```
