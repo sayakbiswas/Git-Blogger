@@ -15,7 +15,7 @@ class Main extends React.Component {
 				<Home>		
 					<Switch>
 						<Route exact path="/" component={LandingScreenContainer} />
-						<Route path="/landing" component={LandingScreenContainer} />
+						<Route exact path="/landing" component={LandingScreenContainer} />
 						<Route path="/dashboard" component={DashboardContainer} />
 					</Switch>
 				</Home>
