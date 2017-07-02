@@ -4,15 +4,16 @@ import globalVars from '../config/globalVars';
 import PropTypes from 'prop-types';
 import { Container } from 'semantic-ui-react';
 
-function LoggedInLandingScreen(props) {
+function Dashboard(props) {
 	return(
 		<Container text>
+			This is the dashboard!
 		</Container>
 	);
 }
 
-LoggedInLandingScreen.propTypes = {
+Dashboard.propTypes = {
 
 };
 
-module.exports = LoggedInLandingScreen;
+module.exports = Dashboard;
