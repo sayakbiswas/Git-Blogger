@@ -22,11 +22,11 @@ var GithubAuthenticate = function() {
 	authWindow.loadURL(authUrl);
 	authWindow.show();
 	authWindow.webContents.on('will-navigate', function(event, url) {
-		success = handleCallback(url, authWindow);
+		handleCallback(url, authWindow);
 	});
 
 	authWindow.webContents.on('did-get-redirect-request', function(event, oldUrl, newUrl) {
-		success = handleCallback(newUrl, authWindow);
+		handleCallback(newUrl, authWindow);
 	});
 
 	authWindow.on('close', function() {
