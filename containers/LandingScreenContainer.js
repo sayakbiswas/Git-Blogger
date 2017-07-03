@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import globalVars from '../config/globalVars';
 import LandingScreen from '../components/LandingScreen';
+import GithubAuthenticate from '../utils/authUtils';
 
 class LandingScreenContainer extends React.Component {
 	handleLoginClicked() {
-		alert("Login Button Clicked");
+		console.log("Login Button Clicked");
+		GithubAuthenticate();
+		alert("token: " + window.localStorage.getItem('githubToken'));
 	}
 
 	render() {

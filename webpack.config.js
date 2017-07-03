@@ -26,5 +26,6 @@ module.exports = {
 				loader: 'url-loader?limit=100000'
 			}
 		]
-	}
+	},
+	target: "electron"
 };
