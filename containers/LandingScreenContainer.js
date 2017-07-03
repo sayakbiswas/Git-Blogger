@@ -18,19 +18,21 @@ class LandingScreenContainer extends React.Component {
 
 	handleLoginClicked() {
 		//console.log("Login Button Clicked");
-		GithubAuthenticate();
-		var githubToken = window.localStorage.getItem('githubToken');
-		if(typeof githubToken === 'undefined' || githubToken == '') {
-			this.setState({
-				isLoggedIn: false,
-				showLoginFailedMessage: true
-			});
-		} else {
-			this.setState({
-				isLoggedIn: true,
-				showLoginFailedMessage: false
-			});
-		}
+		GithubAuthenticate(function() {
+			var githubToken = window.localStorage.getItem('githubToken');
+			if(typeof githubToken === 'undefined' || githubToken == '' || githubToken === null) {
+				this.setState({
+					isLoggedIn: false,
+					showLoginFailedMessage: true
+				});
+			} else {
+				this.setState({
+					isLoggedIn: true,
+					showLoginFailedMessage: false
+				});
+				this.props.history.push("/dashboard");
+			}
+		}.bind(this));
 	}
 
 	render() {
@@ -45,4 +47,4 @@ class LandingScreenContainer extends React.Component {
 	}
 }
 
-module.exports = LandingScreenContainer;
+module.exports = withRouter(LandingScreenContainer);

@@ -12,16 +12,26 @@ class Home extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log("in Home::componentDidMount")
-		if(this.state.isLoggedIn) {
-			this.props.history.push("/dashboard");
-		} else {
+		//console.log("in Home::componentDidMount")
+		var githubToken = window.localStorage.getItem('githubToken');
+		console.log('githubToken ', githubToken);
+		if(typeof githubToken === 'undefined' || githubToken == '' || githubToken === null) {
+			console.log('pushing landing');
+			this.setState({
+				isLoggedIn: false
+			});
 			this.props.history.push("/landing");
+		} else {
+			console.log('pushing dashboard');
+			this.setState({
+				isLoggedIn: true
+			});
+			this.props.history.push("/dashboard");
 		}
 	}
 
 	render() {
-		console.log("props in main ", this.props);
+		//console.log("props in main ", this.props);
 		return(
 			<div className='main-container' style={styles.mainContainer} >
 				{this.props.children}

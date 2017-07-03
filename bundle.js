@@ -31160,17 +31160,27 @@ var Home = function (_React$Component) {
 	_createClass(Home, [{
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			console.log("in Home::componentDidMount");
-			if (this.state.isLoggedIn) {
-				this.props.history.push("/dashboard");
-			} else {
+			//console.log("in Home::componentDidMount")
+			var githubToken = window.localStorage.getItem('githubToken');
+			console.log('githubToken ', githubToken);
+			if (typeof githubToken === 'undefined' || githubToken == '' || githubToken === null) {
+				console.log('pushing landing');
+				this.setState({
+					isLoggedIn: false
+				});
 				this.props.history.push("/landing");
+			} else {
+				console.log('pushing dashboard');
+				this.setState({
+					isLoggedIn: true
+				});
+				this.props.history.push("/dashboard");
 			}
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			console.log("props in main ", this.props);
+			//console.log("props in main ", this.props);
 			return _react2.default.createElement(
 				'div',
 				{ className: 'main-container', style: _styles2.default.mainContainer },
@@ -31244,19 +31254,21 @@ var LandingScreenContainer = function (_React$Component) {
 		key: 'handleLoginClicked',
 		value: function handleLoginClicked() {
 			//console.log("Login Button Clicked");
-			(0, _authUtils2.default)();
-			var githubToken = window.localStorage.getItem('githubToken');
-			if (typeof githubToken === 'undefined' || githubToken == '') {
-				this.setState({
-					isLoggedIn: false,
-					showLoginFailedMessage: true
-				});
-			} else {
-				this.setState({
-					isLoggedIn: true,
-					showLoginFailedMessage: false
-				});
-			}
+			(0, _authUtils2.default)(function () {
+				var githubToken = window.localStorage.getItem('githubToken');
+				if (typeof githubToken === 'undefined' || githubToken == '' || githubToken === null) {
+					this.setState({
+						isLoggedIn: false,
+						showLoginFailedMessage: true
+					});
+				} else {
+					this.setState({
+						isLoggedIn: true,
+						showLoginFailedMessage: false
+					});
+					this.props.history.push("/dashboard");
+				}
+			}.bind(this));
 		}
 	}, {
 		key: 'render',
@@ -31273,7 +31285,7 @@ var LandingScreenContainer = function (_React$Component) {
 	return LandingScreenContainer;
 }(_react2.default.Component);
 
-module.exports = LandingScreenContainer;
+module.exports = (0, _reactRouterDom.withRouter)(LandingScreenContainer);
 
 /***/ }),
 /* 457 */
@@ -66184,7 +66196,7 @@ var electron = __webpack_require__(909).remote;
 var BrowserWindow = electron.BrowserWindow;
 
 
-var GithubAuthenticate = function GithubAuthenticate() {
+var GithubAuthenticate = function GithubAuthenticate(callback) {
 	//console.log("Inside github authenticate");
 	var authWindow = new BrowserWindow({
 		height: 600,
@@ -66200,11 +66212,11 @@ var GithubAuthenticate = function GithubAuthenticate() {
 	authWindow.loadURL(authUrl);
 	authWindow.show();
 	authWindow.webContents.on('will-navigate', function (event, url) {
-		handleCallback(url, authWindow);
+		handleCallback(url, authWindow, callback);
 	});
 
 	authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
-		handleCallback(newUrl, authWindow);
+		handleCallback(newUrl, authWindow, callback);
 	});
 
 	authWindow.on('close', function () {
@@ -66212,7 +66224,7 @@ var GithubAuthenticate = function GithubAuthenticate() {
 	}, false);
 };
 
-function handleCallback(url, authWindow) {
+function handleCallback(url, authWindow, callback) {
 	var raw_code = /code=([^&]*)/.exec(url) || null;
 	var code = raw_code && raw_code.length > 1 ? raw_code[1] : null;
 	var error = /\?error=(.+)$/.exec(url);
@@ -66222,13 +66234,14 @@ function handleCallback(url, authWindow) {
 	}
 
 	if (code) {
-		requestGithubToken(code);
+		requestGithubToken(code, callback);
 	} else if (error) {
-		alert("Couldn't login to GitHub! Please try again.");
+		//alert("Couldn't login to GitHub! Please try again.");
+		callback();
 	}
 }
 
-function requestGithubToken(code) {
+function requestGithubToken(code, callback) {
 	//console.log('received code ', code);
 	var githubRequest = new Request('https://git-blogger-gatekeeper.herokuapp.com/authenticate/' + code);
 	fetch(githubRequest).then(function (response) {
@@ -66240,8 +66253,10 @@ function requestGithubToken(code) {
 	}).then(function (data) {
 		//console.log(data);
 		window.localStorage.setItem('githubToken', data.token);
+		callback();
 	}).catch(function (error) {
-		alert('There was a problem getting the access token. Please retry.');
+		//alert('There was a problem getting the access token. Please retry.');
+		callback();
 	});
 }
 
