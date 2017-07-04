@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import globalVars from '../config/globalVars';
 import LandingScreen from '../components/LandingScreen';
 import GithubAuthenticate from '../utils/authUtils';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import GitHubAPIUtils from '../utils/GitHubAPIUtils';
 
 class LandingScreenContainer extends React.Component {
 	constructor(props) {
@@ -30,6 +31,8 @@ class LandingScreenContainer extends React.Component {
 					isLoggedIn: true,
 					showLoginFailedMessage: false
 				});
+				var username = GitHubAPIUtils.getAuthenticatedUser();
+				var repos = GitHubAPIUtils.getAuthenticatedUserRepos();
 				this.props.history.push("/dashboard");
 			}
 		}.bind(this));
