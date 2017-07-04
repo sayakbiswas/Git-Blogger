@@ -31,9 +31,27 @@ class LandingScreenContainer extends React.Component {
 					isLoggedIn: true,
 					showLoginFailedMessage: false
 				});
-				var username = GitHubAPIUtils.getAuthenticatedUser();
-				var repos = GitHubAPIUtils.getAuthenticatedUserRepos();
-				this.props.history.push("/dashboard");
+				Promise.all([
+					GitHubAPIUtils.getAuthenticatedUser(),
+					GitHubAPIUtils.getAuthenticatedUserRepos()
+				])
+				.then(function(result) {
+					console.log("result ", result);	
+					var username = result[0].login;
+					var websiteRepo = result[1].filter(function(repo) {
+						return repo.name == username + '.github.io';
+					});
+					console.log(websiteRepo);
+					websiteRepo.pop();
+					if(websiteRepo.length > 0) {
+						this.props.history.push("/dashboard");
+					} else {
+						this.props.history.push("/setupnew");
+					}
+				}.bind(this))
+				.catch(function(error) {
+					console.log("Error while calling one ot more GitHub APIs", error);
+				});
 			}
 		}.bind(this));
 	}
