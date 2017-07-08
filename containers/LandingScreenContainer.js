@@ -38,16 +38,39 @@ class LandingScreenContainer extends React.Component {
 				.then(function(result) {
 					console.log("result ", result);	
 					var username = result[0].login;
+					window.localStorage.setItem('username', username);
 					var websiteRepo = result[1].filter(function(repo) {
 						return repo.name == username + '.github.io';
 					});
-					console.log(websiteRepo);
-					websiteRepo.pop();
+					console.log('websiteRepo', websiteRepo);
+					websiteRepo.pop(); //TODO: Remove later
+					return websiteRepo;
+				}.bind(this))
+				.then(function(websiteRepo) {
 					if(websiteRepo.length > 0) {
 						this.props.history.push("/dashboard");
 					} else {
-						this.props.history.push("/setupnew");
+						GitHubAPIUtils.forkRepo('ApolloAuto/apollo')
+						.then(function(forkResult) {
+							return forkResult;
+						}.bind(this))
+						.then(function(forkResult) {
+							var oldRepoName = 'apollo';
+							var newRepoName = 'sayakrenamedapollo';
+							GitHubAPIUtils.renameRepo(oldRepoName, newRepoName)
+							.then(function(result) {
+								this.props.history.push("/setupnew");
+								return result;
+							}.bind(this))
+							.catch(function(error) {
+								console.log('Error while renaming repo ', error);
+							});
+						}.bind(this))
+						.catch(function(error) {
+							console.log('Error while forking repo', error);
+						});
 					}
+					return websiteRepo;
 				}.bind(this))
 				.catch(function(error) {
 					console.log("Error while calling one ot more GitHub APIs", error);

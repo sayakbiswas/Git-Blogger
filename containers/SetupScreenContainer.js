@@ -1,6 +1,7 @@
 import React from 'react';
 import globalVars from '../config/globalVars';
 import SetupScreen from '../components/SetupScreen';
+import GitHubAPIUtils from '../utils/GitHubAPIUtils';
 
 class SetupScreenContainer extends React.Component {
 	constructor(props) {
@@ -8,6 +9,7 @@ class SetupScreenContainer extends React.Component {
 	}
 
 	render() {
+		console.log('rendering');
 		return(
 			<SetupScreen />
 		);
